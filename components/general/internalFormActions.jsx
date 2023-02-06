@@ -2,14 +2,14 @@
 import {ArrowDownTrayIcon, ClipboardDocumentIcon} from "@heroicons/react/24/outline";
 
 
-export default function InternalFormActions({id}) {
+export default function InternalFormActions({type, id}) {
 
     const handleDownload = () => {
 
     }
 
     const handleCopyLink = () => {
-        navigator.clipboard.writeText(`https://exalted.dev/public/quote/${id}`)
+        navigator.clipboard.writeText(`https://exalted.dev/public/${type}/${id}`)
     }
 
     return (

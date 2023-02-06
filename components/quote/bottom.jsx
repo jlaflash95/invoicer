@@ -1,4 +1,10 @@
-export default function Bottom({client}) {
+export default function Bottom() {
+
+    const data = {
+        phone: '+1 (715) 321-3386',
+        email: 'jake@exalted.dev',
+        website: 'exalted.dev'
+    }
 
     return (
         <div className={"col-span-3"}>
@@ -24,9 +30,9 @@ export default function Bottom({client}) {
                 <div className={"basis-1/2 text-center"}>
                     <h2 className={"text-2xl font-bold uppercase"}>Questions? Contact Me:</h2>
                     <ul className={"text-start ml-16 mt-4 space-y-2"}>
-                        <li className={"flex"}><p className={"text-lg font-bold"}>Phone:</p><span className={"flex-1 h-[.5px] bg-gray-200 mt-auto mb-1.5 mx-1"}></span><p className={"mr-16"}>+1 (715) 321-3386</p></li>
-                        <li className={"flex"}><p className={"text-lg font-bold"}>Email:</p><span className={"flex-1 h-[1px] bg-gray-200 mt-auto mb-1.5 mx-1"}></span><p className={"mr-16"}>jake@exalted.dev</p></li>
-                        <li className={"flex"}><p className={"text-lg font-bold"}>Website:</p><span className={"flex-1 h-[1px] bg-gray-200 mt-auto mb-1.5 mx-1"}></span><p className={"mr-16"}>exalted.dev</p></li>
+                        <li className={"flex"}><p className={"text-lg font-bold"}>Phone:</p><span className={"flex-1 h-[.5px] bg-gray-200 mt-auto mb-1.5 mx-1"}></span><p className={"mr-16"}>{data.phone}</p></li>
+                        <li className={"flex"}><p className={"text-lg font-bold"}>Email:</p><span className={"flex-1 h-[1px] bg-gray-200 mt-auto mb-1.5 mx-1"}></span><p className={"mr-16"}>{data.email}</p></li>
+                        <li className={"flex"}><p className={"text-lg font-bold"}>Website:</p><span className={"flex-1 h-[1px] bg-gray-200 mt-auto mb-1.5 mx-1"}></span><p className={"mr-16"}>{data.website}</p></li>
                     </ul>
                 </div>
 
@@ -43,7 +49,6 @@ export default function Bottom({client}) {
             <div className={"flex justify-center pb-4 pt-6"}>
                 <p className={"text-center italic font-medium text-sm mt-2 max-w-lg drop-shadow-md"}>Actual development costs may differ slightly from the original quote. You agree to pay billed overages, if any, on receipt of the final invoice.</p>
             </div>
-
 
         </div>
     )

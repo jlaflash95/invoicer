@@ -1,10 +1,8 @@
-'use client'
+"use client"
+import {useClientContext} from "@/context/ClientContext";
+export default function ClientDocuments({client}) {
 
-import {useList} from "@/stores/store";
-
-export default function ClientInvoices({clientId}) {
-
-    const {selectedClientId, selectedClient} = useList()
+    const {selectedClient} = useClientContext()
 
     const options = {
         weekday: 'short',
@@ -13,13 +11,9 @@ export default function ClientInvoices({clientId}) {
         day: 'numeric'
     }
 
-    const handleClick = (id) => {
-
-    }
-
-    if (selectedClientId === clientId) {
-        if (selectedClient.expand?.invoices) return (
-            selectedClient.expand.invoices.map((invoice, index) =>(
+    if (client.id === selectedClient) {
+        if (client.expand?.invoices) return (
+            client.expand.invoices.map((invoice, index) =>(
                 <a key={invoice.id}
                     className={"bg-white shadow-xl flex py-2 pl-4 text-base font-semibold cursor-pointer border-b border-gray-200 cursor-pointer"}
                     href={`/invoice/${invoice.id}`}

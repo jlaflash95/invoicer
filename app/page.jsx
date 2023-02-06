@@ -1,17 +1,13 @@
-import ClientHeader from '@/components/view/ClientHeader'
-import ClientInvoices from '@/components/view/ClientInvoices'
-import {useList} from "@/stores/store";
+'use client'
+import ClientHeader from '@/components/listView/clientHeader'
+import ClientDocuments from '@/components/listView/clientDocuments'
+import {useClientContext} from "@/context/ClientContext";
 
-// Fetch Data
-const getData = async () => {
-    const res = await fetch('http://127.0.0.1:8090/api/collections/clients/records?sort=+company&expand=invoices')
-    let clients = await res.json()
-    useList.setState({clients: clients?.items})
-}
 
-export default async function Main() {
-    await getData()
-    const clients = useList.getState().clients
+
+export default function Main() {
+
+    const {clients} = useClientContext()
 
     if (clients) {
         return (
@@ -23,7 +19,7 @@ export default async function Main() {
                     {clients?.map((client) => (
                         <div className={""} key={client.id}>
                             <ClientHeader client={client}/>
-                            <ClientInvoices clientId={client.id}/>
+                            <ClientDocuments client={client}/>
                         </div>
                     ))}
                 </div>

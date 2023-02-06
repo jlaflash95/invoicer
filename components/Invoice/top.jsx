@@ -3,7 +3,7 @@ export default async function Top({invoice}) {
 
 
     let {
-        dueDate,
+        dateSent,
         expand: {client},
         details,
         subTotal,
@@ -25,6 +25,9 @@ export default async function Top({invoice}) {
         month: 'numeric',
         day: 'numeric'
     }
+
+    const dueDate = new Date(dateSent)
+    dueDate.setDate(dueDate.getDate() + 7)
 
     return (
         <Fragment>
@@ -72,7 +75,7 @@ export default async function Top({invoice}) {
                     <div key={detail.id}
                          className={`grid grid-cols-12 p-1 ${(index % 2 !== 0) && "bg-gray-100 rounded py-2"}`}>
                         <div className={"col-span-8 px-4 -indent-2.5 pr-16"}>
-                            <span className={"pr-1"}>&#x2022;</span>{detail.itemDescription}
+                            <span className={"pr-1"}>&#x2022;</span>{detail.itemName} -- {detail.itemDescription}
                         </div>
                         <div className={"col-span-1 my-auto text-center"}>
                             {detail.hours}

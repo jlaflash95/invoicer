@@ -1,16 +1,26 @@
 "use client"
 import {useState} from "react";
 import ClientSelect from "@/components/create/clientSelect";
-import {useInvoiceCreation} from "@/stores/store";
 import {ArrowSmallLeftIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {useRouter} from "next/navigation";
+import {useClientContext} from "@/context/ClientContext";
 
 export default function Quote({setDecision}) {
 
     const router = useRouter()
 
+    //Date logic
+    let dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + 7)
+
+    const dateOptions = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+    }
+
     //Component State
-    const [dueDate, setDueDate] = useState("")
     const [description, setDescription] = useState("")
     const [taxRate, setTaxRate] = useState("")
     const [items, setItems] = useState([
@@ -23,12 +33,9 @@ export default function Quote({setDecision}) {
         }
     ])
 
-    const selectedClient = useInvoiceCreation.getState().selectedClient
+    const {selectedClient} = useClientContext()
 
     //Component Functions
-    const handleDueDate = (e) => {
-        setDueDate(e.target.value)
-    }
     const handleDescription = (e) => {
         setDescription(e.target.value)
     }
@@ -95,7 +102,6 @@ export default function Quote({setDecision}) {
     const handleRemoveItem = (e, index) => {
         let tempArr = [...items]
         tempArr.splice(index, 1)
-        console.log(tempArr)
         setItems(tempArr)
     }
 
@@ -125,7 +131,7 @@ export default function Quote({setDecision}) {
         subTotal = subTotal.toFixed(2)
 
         //Create object for database
-        let invoice = {
+        let quote = {
             number: Math.floor(Math.random() * 1000),
             description,
             hours: +hours,
@@ -141,29 +147,31 @@ export default function Quote({setDecision}) {
             total: +total,
         }
 
-        // console.log("Invoice:", invoice)
-        // console.log("Invoice Items:", invoice.details)
+            // console.log("Invoice:", invoice)
+            // console.log("Invoice Items:", invoice.details)
 
         //Database actions
         //Create new Invoice
-        let res = await fetch('http://127.0.0.1:8090/api/collections/quotes/records', {
+        let res = await fetch('https://invoicer.pockethost.io/api/collections/quotes/records', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(invoice)
+            body: JSON.stringify(quote)
         })
         let data = await res.json()
 
-        await fetch(`http://127.0.0.1:8090/api/collections/clients/records/${selectedClient.id}`, {
+        await fetch(`https://invoicer.pockethost.io/api/collections/clients/records/${selectedClient.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                quotes: [...selectedClient.invoices, data.id]
+                quotes: [...selectedClient?.quotes, data.id]
             })
         })
+
+        // todo alert success wait 5 seconds, then push.
 
         await router.push('/')
 
@@ -180,7 +188,7 @@ export default function Quote({setDecision}) {
                 <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
-                            <h3 className="text-lg font-medium leading-6 text-gray-900">Invoice Details</h3>
+                            <h3 className="text-lg font-medium leading-6 text-gray-900">Quote Details</h3>
                             <p className="mt-1 text-sm text-gray-500">
                                 This is the basic information for the invoice, the general scope of the work etc.
                             </p>
@@ -188,18 +196,11 @@ export default function Quote({setDecision}) {
                         <div className="mt-5 space-y-6 md:col-span-2 md:mt-0">
 
                             <div>
-                                <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+                                <label className="block text-sm font-medium text-gray-700">
                                     Due Date
                                 </label>
                                 <div className="mt-1"></div>
-                                <input
-                                    type="date"
-                                    name="dueDate"
-                                    id="dueDate"
-                                    value={dueDate}
-                                    onChange={handleDueDate}
-                                    className={"block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"}
-                                ></input>
+                                <p>{dueDate.toLocaleDateString('en-US', dateOptions)}</p>
 
                             </div>
 
@@ -218,7 +219,7 @@ export default function Quote({setDecision}) {
                                     defaultValue={''}
                                 />
                                 </div>
-                                <p className="mt-2 text-sm text-gray-500">Broad description of the total project.</p>
+                                <p className="mt-2 text-sm text-gray-500">Broad description of the total project. For internal use.</p>
                             </div>
 
                             <div className={"flex-col"}>
@@ -250,7 +251,7 @@ export default function Quote({setDecision}) {
                 <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
-                            <h3 className="text-lg font-medium leading-6 text-gray-900">Invoice Items</h3>
+                            <h3 className="text-lg font-medium leading-6 text-gray-900">Items</h3>
                             <p className="mt-1 text-sm text-gray-500">
                                 This information will be displayed to the client in a breakdown.
                             </p>

@@ -1,15 +1,16 @@
-import Public from '@/components/quote/views/public'
+import PublicQuoteComponent from '@/components/quote/views/public'
 
-const getInvoice = async (id) => {
-    const res = await fetch(`http://127.0.0.1:8090/api/collections/invoices/records?filter=(id="${id}")&expand=client`)
+const getQuote = async (id) => {
+    const res = await fetch(`https://invoicer.pockethost.io/api/collections/quotes/records?filter=(id="${id}")&expand=client`)
     const data = await res.json()
     return data?.items[0]
 }
 export default async function PublicQuote(searchParams) {
 
-    const quote = await getInvoice(searchParams.params.id)
+    const id = searchParams.params.id
+    const quote = await getQuote(id)
 
     return (
-        <Public quote={quote}/>
+        <PublicQuoteComponent quote={quote}/>
     )
 }

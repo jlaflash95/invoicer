@@ -3,7 +3,7 @@ import { ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 
-export default function Client({setDecision}) {
+export default function Proposal({setDecision}) {
 
     const router = useRouter()
 
@@ -19,6 +19,7 @@ export default function Client({setDecision}) {
 
 
     const handleName = (e) => {
+
         setName(e.target.value)
     }
 
@@ -64,8 +65,6 @@ export default function Client({setDecision}) {
             workingPhoto.append("photo", photo[0])
         }
 
-        console.log(Object.fromEntries(workingPhoto))
-
         const client = {
             company: name,
             website,
@@ -77,9 +76,7 @@ export default function Client({setDecision}) {
             phoneNumber: phone
         }
 
-        console.log(client)
-
-        const res = await fetch("http://127.0.0.1:8090/api/collections/clients/records", {
+        const res = await fetch("https://invoicer.pockethost.io/api/collections/clients/records", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -89,7 +86,7 @@ export default function Client({setDecision}) {
         const data = await res.json()
 
         if (photo) {
-            await fetch(`http://127.0.0.1:8090/api/collections/clients/records/${data.id}`, {
+            await fetch(`https://invoicer.pockethost.io/api/collections/clients/records/${data.id}`, {
                 method: 'PATCH',
                 body: workingPhoto
             })

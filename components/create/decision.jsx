@@ -1,45 +1,42 @@
 "use client"
-import {useList} from '@/stores/store'
-import {BanknotesIcon, UserIcon} from "@heroicons/react/24/outline";
+import {BanknotesIcon, DocumentArrowUpIcon, UserIcon} from "@heroicons/react/24/outline";
 import {ChevronRightIcon} from "@heroicons/react/20/solid";
-import Client from '@/components/create/client/Client'
-import Invoice from '@/components/create/invoice/Invoice'
-import Proposal from '@/components/create/proposal/Proposal'
-import Quote from '@/components/create/quote/Quote'
+import Client from '@/components/create/client/client'
+import Invoice from '@/components/create/invoice/invoice'
+import Proposal from '@/components/create/proposal/proposal'
+import Quote from '@/components/create/quote/quote'
 import {useState} from "react";
+import devicePhoneMobileIcon from "@heroicons/react/24/outline/esm/DevicePhoneMobileIcon";
 
 
-export default function Decision({clients}) {
-
-    //Create state on client-side from server-side props
-    useList.setState({clients: clients})
+export default function Decision() {
 
     const items = [
         {
             ref: 'client',
             name: 'New Client',
-            description: 'Create a new client to manage invoices under.',
+            description: 'Create a new clientContextOld to manage invoices under.',
             iconColor: 'bg-red-200',
             icon: UserIcon,
         },
         {
             ref: 'quote',
             name: 'New Quote',
-            description: 'Create a new quote for an existing client.',
+            description: 'Create a new quote for an existing clientContextOld.',
             iconColor: 'bg-yellow-300',
-            icon: BanknotesIcon,
+            icon: DocumentArrowUpIcon,
         },
         {
             ref: 'proposal',
             name: 'New Proposal',
-            description: 'Link a new mockup for an existing client.',
+            description: 'Link a new mockup for an existing clientContextOld.',
             iconColor: 'bg-gradient-to-br from-sky-300 to-indigo-300',
-            icon: BanknotesIcon,
+            icon: devicePhoneMobileIcon,
         },
         {
             ref: 'invoice',
             name: 'New Invoice',
-            description: 'Create a new invoice for an existing client.',
+            description: 'Create a new invoice for an existing clientContextOld.',
             iconColor: 'bg-green-400',
             icon: BanknotesIcon,
         }

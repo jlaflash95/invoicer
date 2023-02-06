@@ -1,8 +1,8 @@
-'use client'
-import {useList, useInvoiceCreation} from "@/stores/store";
+"use client"
 import {useEffect, useState} from 'react'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/react/20/solid'
 import {Combobox} from '@headlessui/react'
+import {useClientContext} from "@/context/ClientContext";
 
 // const clients = [
 //     { id: 1, name: 'Leslie Alexander' },
@@ -15,16 +15,10 @@ function classNames(...classes) {
 
 export default function ClientSelect() {
 
-    let clients = useList((state) => state.clients)
+    const {clients, selectedClient, setSelectedClient} = useClientContext()
 
     const [query, setQuery] = useState('')
-    const [selectedClient, setSelectedClient] = useState(null)
 
-    useEffect(() => {
-        if (selectedClient) {
-            useInvoiceCreation.setState({selectedClient: selectedClient})
-        }
-    }, [selectedClient])
     const filteredPeople =
         query === ''
             ? clients
@@ -33,7 +27,7 @@ export default function ClientSelect() {
             })
 
     return (
-        <Combobox as="div" value={selectedClient} onChange={setSelectedClient}>
+        <Combobox as="div" value={selectedClient} onChange={(client) => setSelectedClient(client)}>
             <Combobox.Label className="block text-sm font-medium text-gray-700">Select an existing client:</Combobox.Label>
 
             <div className="relative mt-1">

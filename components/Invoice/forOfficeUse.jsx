@@ -39,7 +39,7 @@ export default function ForOfficeUse({invoice}) {
         setCommissioned(!commissioned)
 
         //Update invoice in DB
-        await fetch(`http://127.0.0.1:8090/api/collections/invoices/records/${invoice.id}`, {
+        await fetch(`https://invoicer.pockethost.io/api/collections/invoices/records/${invoice.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export default function ForOfficeUse({invoice}) {
         setComplete(!complete)
 
         //Update invoice in DB
-        await fetch(`http://127.0.0.1:8090/api/collections/invoices/records/${invoice.id}`, {
+        await fetch(`https://invoicer.pockethost.io/api/collections/invoices/records/${invoice.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ export default function ForOfficeUse({invoice}) {
         setPaid(!paid)
 
         //Update invoice in DB
-        await fetch(`http://127.0.0.1:8090/api/collections/invoices/records/${invoice.id}`, {
+        await fetch(`https://invoicer.pockethost.io/api/collections/invoices/records/${invoice.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ export default function ForOfficeUse({invoice}) {
 
                 <div className={"col-span-2 h-[1.5px] max-w-[98%] bg-gray-700 bg-opacity-50"}></div>
 
-                <div class={"col-span-1 flex-col border-r-[1px] border-gray-700 border-opacity-30 pr-2 pt-5"}>
+                <div className={"col-span-1 flex-col border-r-[1px] border-gray-700 border-opacity-30 pr-2 pt-5"}>
 
                     <div className={"flex justify-between"}>
                         <p className={"italic font-light"}>Date Sent</p><span

@@ -1,16 +1,26 @@
 "use client"
 import {useState} from "react";
 import ClientSelect from "@/components/create/clientSelect";
-import {useInvoiceCreation} from "@/stores/store";
 import {ArrowSmallLeftIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {useRouter} from "next/navigation";
+import {useClientContext} from "@/context/ClientContext";
 
 export default function Invoice({setDecision}) {
 
     const router = useRouter()
 
+    //Date logic
+    let dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + 7)
+
+    const dateOptions = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+    }
+
     //Component State
-    const [dueDate, setDueDate] = useState("")
     const [description, setDescription] = useState("")
     const [taxRate, setTaxRate] = useState("")
     const [items, setItems] = useState([
@@ -23,12 +33,9 @@ export default function Invoice({setDecision}) {
         }
     ])
 
-    const selectedClient = useInvoiceCreation.getState().selectedClient
+    const {selectedClient} = useClientContext()
 
     //Component Functions
-    const handleDueDate = (e) => {
-        setDueDate(e.target.value)
-    }
     const handleDescription = (e) => {
         setDescription(e.target.value)
     }
@@ -95,7 +102,6 @@ export default function Invoice({setDecision}) {
     const handleRemoveItem = (e, index) => {
         let tempArr = [...items]
         tempArr.splice(index, 1)
-        console.log(tempArr)
         setItems(tempArr)
     }
 
@@ -141,12 +147,13 @@ export default function Invoice({setDecision}) {
             total: +total,
         }
 
+        // console.log(selectedClient)
         // console.log("Invoice:", invoice)
         // console.log("Invoice Items:", invoice.details)
 
         //Database actions
         //Create new Invoice
-        let res = await fetch('http://127.0.0.1:8090/api/collections/invoices/records', {
+        let res = await fetch('https://invoicer.pockethost.io/api/collections/invoices/records', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -155,15 +162,17 @@ export default function Invoice({setDecision}) {
         })
         let data = await res.json()
 
-        await fetch(`http://127.0.0.1:8090/api/collections/clients/records/${selectedClient.id}`, {
+        await fetch(`https://invoicer.pockethost.io/api/collections/clients/records/${selectedClient.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                invoices: [...selectedClient.invoices, data.id]
+                invoices: [...selectedClient?.invoices, data.id]
             })
         })
+
+        // todo alert success wait 5 seconds, then push.
 
         await router.push('/')
 
@@ -192,14 +201,7 @@ export default function Invoice({setDecision}) {
                                     Due Date
                                 </label>
                                 <div className="mt-1"></div>
-                                <input
-                                    type="date"
-                                    name="dueDate"
-                                    id="dueDate"
-                                    value={dueDate}
-                                    onChange={handleDueDate}
-                                    className={"block w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"}
-                                ></input>
+                                <p>{dueDate.toLocaleDateString('en-US', dateOptions)}</p>
 
                             </div>
 

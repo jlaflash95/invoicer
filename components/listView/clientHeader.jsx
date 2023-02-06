@@ -1,12 +1,10 @@
-'use client'
-
-import {useList} from '@/stores/store'
+"use client"
 import {ChevronRightIcon, ChevronDownIcon} from "@heroicons/react/24/outline";
+import {useClientContext} from "@/context/ClientContext";
 
 export default function Client({client}) {
 
-    //Destructure
-    const {selectedClientId} = useList()
+    const {selectedClient, setSelectedClient} = useClientContext()
 
     // Class Hack
     function classNames(...classes) {
@@ -15,17 +13,13 @@ export default function Client({client}) {
 
     const handleCompanyClick = (client) => {
         //find company in list by ID and set expanded flag to true
-        if (client.id === selectedClientId) useList.setState({selectedClientId: null, selectedClient: {}})
-        else useList.setState({selectedClientId: client.id, selectedClient: client})
-
-        //Get invoices to display
-        // getInvoices(client.id)
-
+        if (client.id === selectedClient) setSelectedClient(null)
+        else setSelectedClient(client.id)
     }
 
     return (
         <button className={classNames(
-            client.id === selectedClientId
+            client.id === selectedClient
                 ? 'border-b border-gray-300 rounded-t'
                 : 'rounded',
             "bg-white px-4 py-5 sm:px-6 bg-gradient-to-r from-sky-100 to-indigo-200 shadow-xl flex cursor-pointer justify-between w-full"
@@ -37,7 +31,7 @@ export default function Client({client}) {
                 <p className="text-lg font-normal text-gray-800">{client.company} | {client.firstName} {client.lastName}</p>
             </span>
             <span className={"h-5 w-5 my-auto pt-.75"}>
-                {(selectedClientId === client.id)
+                {(selectedClient === client.id)
                     ? <ChevronDownIcon/>
                     : <ChevronRightIcon/>}
             </span>
